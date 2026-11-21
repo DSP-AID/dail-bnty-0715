@@ -1,0 +1,5 @@
+# Byte-exact everywhere: CSV sha256s are asserted in tests and embedded in reports.
+*.csv -text
+report/*.json -text
+report/*.md -text
+*.sh -text

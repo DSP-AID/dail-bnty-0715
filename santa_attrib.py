@@ -233,8 +233,11 @@ def main(argv=None):
     if args.out_prefix:
         pre = Path(args.out_prefix)
         pre.parent.mkdir(parents=True, exist_ok=True)
-        pre.with_suffix(".json").write_text(json.dumps(rep, indent=1, sort_keys=True), encoding="utf-8")
-        pre.with_suffix(".md").write_text(render_markdown(rep), encoding="utf-8")
+        # newline="\n": reports must be byte-identical on every platform (verify.sh byte-compares)
+        with open(pre.with_suffix(".json"), "w", encoding="utf-8", newline="\n") as f:
+            json.dump(rep, f, indent=1, sort_keys=True)
+        with open(pre.with_suffix(".md"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(render_markdown(rep))
 
     print(json.dumps({"path": rep["submission"]["path"], "sha256": rep["submission"]["sha256"],
                       "puzzles": rep["submission"]["puzzles"],
